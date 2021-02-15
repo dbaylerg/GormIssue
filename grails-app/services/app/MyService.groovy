@@ -39,8 +39,13 @@ class MyService {
                 myDomain.save()
             }
 
+            MyDomain.withTransaction {
+                assert (myDomain != null)
+                assert (!myDomain.isDirty())
+            } // Issue: This results is an Update to MyDomain when it is not dirty!
+
             assert (!myDomain.isDirty())
-            session.flush() // Issue: This results is an Update to MyDomain when it is not dirty!
+            session.flush() // Issue: Again this results is an Update to MyDomain when it is not dirty!
 
             assert (!myDomain.isDirty())
             session.flush() // Issue: Again this results is an Update to MyDomain when it still is not dirty!
